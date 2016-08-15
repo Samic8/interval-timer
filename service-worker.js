@@ -20,7 +20,6 @@ function fetchListener(event) {
 	var request = event.request;
 	event.respondWith(
 		caches.match(event.request).then(function (response) {
-			console.log('response', response);
 			if (response) {
 				return response;
 			}

@@ -1,27 +1,48 @@
-document.addEventListener('DOMContentLoaded', DOMContentLoaded);
+document.addEventListener('DOMContentLoaded', function() {
+	'use strict';
 
-function DOMContentLoaded() {
-	loadJSON(addQuoteToDOM, getRandomNumber());
-}
+	var remainingTime = document.querySelector('#remainingTime');
+	var startButton = document.querySelector('#startButton');
+	var secondsInput = document.querySelector('#secondsInput');
 
-function addQuoteToDOM(response) {
-	var quote = JSON.parse(response);
-	document.querySelector('blockquote').innerHTML = quote.text;
-	document.querySelector('#author').innerHTML = quote.author;
-}
+	init();
 
-function loadJSON(callback, fileNumber) {
-	var xobj = new XMLHttpRequest();
-	xobj.overrideMimeType('application/json');
-	xobj.open('GET', 'quote-' + fileNumber + '.json', true);
-	xobj.onreadystatechange = function () {
-		if (xobj.readyState == 4 && xobj.status == "200") {
-			callback(xobj.responseText);
+	function init() {
+		remainingTime.innerHTML = 0;
+		startButton.addEventListener('click', startTimer);
+	}
+
+	function startTimer() {
+		var timer = new Timer(parseInt(secondsInput.value));
+
+		timer.start(function(remainingSeconds) {
+			remainingTime.innerHTML = remainingSeconds;
+		});
+	}
+
+	function Timer(length) {
+		this.length = length;
+		this.start = start;
+		this.endTime = endTime();
+		this.remainingTime = remainingTime;
+
+		function start(callback) {
+			callback(this.remainingTime());
+			setInterval(function() {
+				callback(this.remainingTime());
+			}.bind(this), 1000);
+		}
+		
+		function remainingTime() {
+			var t = Date.parse(this.endTime) - Date.parse(new Date());
+			return Math.floor( (t/1000) % 60 );
+		}
+
+		function endTime() {
+			var endTime = new Date();
+			endTime.setSeconds(endTime.getSeconds() + length);
+			return endTime;
 		}
 	}
-	xobj.send(null);
-}
 
-function getRandomNumber() {
-	return Math.floor(Math.random() * 2) + 1;
-}
+});

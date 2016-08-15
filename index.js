@@ -12,9 +12,13 @@ navigator.serviceWorker.addEventListener('controllerchange', function(event) {
 		
 		if (this.state === 'activated') {
 			console.log(this.state, 'ACTIVEATE');
-			document.getElementById('offlineNotification').classlist.remove('hidden');
+			document.getElementById('offlineNotification').classList.remove('hidden');
 		}
 	});
 	
 });
 
+// navigator.serviceWorker.getRegistrations().then(function(registrations) {
+//  for(let registration of registrations) {
+//   registration.unregister();
+// } });
