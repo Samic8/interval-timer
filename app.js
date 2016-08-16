@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	var remainingTime = document.querySelector('#remainingTime');
 	var startButton = document.querySelector('#startButton');
 	var secondsInput = document.querySelector('#secondsInput');
+	var timer = new Timer();
 
 	init();
 
@@ -13,34 +14,48 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	function startTimer() {
-		var timer = new Timer(parseInt(secondsInput.value));
-
+		if (timer) {
+			timer.stop();
+		}
+		timer.setLength(parseInt(secondsInput.value));
 		timer.start(function(remainingSeconds) {
 			remainingTime.innerHTML = remainingSeconds;
 		});
 	}
 
-	function Timer(length) {
-		this.length = length;
+	function Timer() {
 		this.start = start;
-		this.endTime = endTime();
+		this.stop = stop;
+		this.getEndTime = getEndTime;
 		this.remainingTime = remainingTime;
+		this.setLength = setLength;
 
 		function start(callback) {
 			callback(this.remainingTime());
-			setInterval(function() {
+			this.secondIntervalLoop = window.setInterval(function() {
 				callback(this.remainingTime());
 			}.bind(this), 1000);
+		}
+
+		function stop() {
+			if (this.secondIntervalLoop) {
+				clearInterval(this.secondIntervalLoop);
+			}
+		}
+
+		function setLength(seconds) {
+			this.length = seconds;
+			this.endTime = this.getEndTime();
 		}
 		
 		function remainingTime() {
 			var t = Date.parse(this.endTime) - Date.parse(new Date());
-			return Math.floor( (t/1000) % 60 );
+			return Math.floor( (t/1000) );
 		}
 
-		function endTime() {
+		function getEndTime() {
 			var endTime = new Date();
-			endTime.setSeconds(endTime.getSeconds() + length);
+			endTime.setSeconds(endTime.getSeconds() + this.length);
 			return endTime;
 		}
 	}
