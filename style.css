@@ -1,3 +1,17 @@
 .hidden {
 	display: none;
 }
+
+.startButton {
+	display: inline-block;
+	border: 10px solid transparent;
+	border-left: 20px solid black;
+	border-right: none;
+}
+
+.stopButton {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	background-color: black;
+}

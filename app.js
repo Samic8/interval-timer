@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	var remainingTime = document.querySelector('#remainingTime');
 	var startButton = document.querySelector('#startButton');
+	var stopButton = document.querySelector('#stopButton');
 	var secondsInput = document.querySelector('#secondsInput');
 	var timer = new Timer();
 
@@ -11,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	function init() {
 		remainingTime.innerHTML = 0;
 		startButton.addEventListener('click', startTimer);
+		stopButton.addEventListener('click', stopTimer);
 	}
 
 	function startTimer() {
@@ -21,6 +23,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		timer.start(function(remainingSeconds) {
 			remainingTime.innerHTML = remainingSeconds;
 		});
+	}
+
+	function stopTimer() {
+		timer.stop();
 	}
 
 	function Timer() {
