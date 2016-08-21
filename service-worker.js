@@ -1,6 +1,6 @@
 var CACHE_NAME = 'dependencies-cache';
 
-var REQUIRED_FILES = ['quote-1.json', 'quote-2.json', 'app.js', 'index.js'];
+var REQUIRED_FILES = ['app.js', 'index.js'];
 
 self.addEventListener('install', installListener);
 self.addEventListener('fetch', fetchListener);

@@ -39,7 +39,11 @@ document.addEventListener('DOMContentLoaded', function() {
 		function start(callback) {
 			callback(this.remainingTime());
 			this.secondIntervalLoop = window.setInterval(function() {
-				callback(this.remainingTime());
+				var remainingTime = this.remainingTime();
+				if (remainingTime === 0) { // broken
+					clearInterval(this.secondIntervalLoop);
+				}
+				callback(remainingTime);
 			}.bind(this), 1000);
 		}
 
@@ -50,6 +54,13 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 
 		function setLength(seconds) {
+			if (typeof seconds != 'number') {
+				throw 'Length must be a number';
+				return;
+			}
+			if (!seconds) {
+				seconds = 0;
+			}
 			this.length = seconds;
 			this.endTime = this.getEndTime();
 		}
